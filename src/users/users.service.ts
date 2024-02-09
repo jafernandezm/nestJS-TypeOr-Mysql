@@ -15,6 +15,13 @@ export class UsersService {
 
   }
 
+  findOneByEmailWithPassword(email: string){
+    return this.userRepository.findOne({
+      where: {email},
+      select: ['id','name','email' ,'password', 'role']
+    });
+  }
+
   create(createUserDto: CreateUserDto) {
     return this.userRepository.save(createUserDto);
   }
@@ -24,7 +31,7 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.userRepository.find();
   }
 
   findOne(id: number) {

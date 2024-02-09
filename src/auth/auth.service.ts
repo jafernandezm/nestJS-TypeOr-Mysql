@@ -35,7 +35,8 @@ export class AuthService {
     }
 
     async login( { email, password }: LoginDto) {
-        const user = await this.usersService.finOneByEmail(email);
+        const user = await this.usersService.findOneByEmailWithPassword(email);
+        
         if (!user) {
             throw new UnauthorizedException('email is wrong');
         }
@@ -43,6 +44,7 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new UnauthorizedException('password is wrong');
         }
+       
         const payload = { email: user.email, role: user.role }; // payload es la informacion que se va a guardar en el token
         const token = await this.jwtService.sign(payload);// se crea el token
         return { 

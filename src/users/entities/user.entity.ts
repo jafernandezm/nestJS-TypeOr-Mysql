@@ -1,3 +1,4 @@
+import { Role } from "../../common/enums/rol.enum";
 import { Column, DeleteDateColumn, Entity } from "typeorm";
 
 
@@ -9,10 +10,11 @@ export class User {
     name: string;
     @Column( {unique: true , nullable: false})
     email: string;
-    @Column({nullable: false})
+    @Column({nullable: false, select: false}) //select: false para que no se muestre en la respuesta de la API
     password: string;
-    @Column({default: 'user'})
-    role : string;
+    // Este es un enum que solo toma los valores de Role admin o user
+    @Column({type: 'enum' ,default: Role.USER, enum: Role})
+    role : Role;
     @DeleteDateColumn()
     deletedAt: Date;
 

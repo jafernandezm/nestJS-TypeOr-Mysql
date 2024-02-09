@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cat } from './entities/cat.entity';
 import { Repository } from 'typeorm';
 import { Breed } from 'src/breeds/entities/breed.entity';
+import { UserActiveInterface } from 'src/common/interfaces/user-active-interface';
 
 @Injectable()
 export class CatsService {
@@ -18,15 +19,16 @@ export class CatsService {
   ) {}
 
 
-  async create(createCatDto: CreateCatDto) {
+  async create(createCatDto: CreateCatDto, user: UserActiveInterface ) {
     const breed = await this.breedRepository.findOneBy({ name : createCatDto.breed});
     if(!breed){
       throw new BadRequestException(`Breed ${createCatDto.breed} not found`);
     }
-
+    console.log(user);
     return await this.catRepository.save({
       ...createCatDto,
-      breed: breed
+      breed: breed,
+      userEmail: user.email,
     });
   }
 

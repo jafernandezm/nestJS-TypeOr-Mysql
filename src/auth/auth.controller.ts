@@ -6,8 +6,10 @@ import { AuthGuard } from './guard/auth.guard';
 import { Request } from 'express';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles.guard';
-import { Role } from './enums/rol.enum';
+import { Role } from '../common/enums/rol.enum';
 import { Auth } from './decorators/auth.decorator';
+import { ActiverUser } from 'src/common/decorators/active-user.decorator';
+import { UserActiveInterface } from 'src/common/interfaces/user-active-interface';
 
 interface RequestWithUser extends Request {
     user: {
@@ -49,10 +51,8 @@ export class AuthController {
     
     @Get('profile')
     @Auth(Role.ADMIN)
-    profile(@Req()
-    req: RequestWithUser // se crea una interfaz para que typescript sepa que el req tiene un user,
-    ) {
-        return this.authService.profile(req.user);
+    profile(@ActiverUser() user: UserActiveInterface){ // se crea una interfaz para que typescript sepa que el req tiene un user,) {
+        return this.authService.profile(user);
     }
 
 
